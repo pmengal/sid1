@@ -17,7 +17,7 @@ namespace SID1.Commands
     {
         public sealed class Settings : BaseSettings
         {
-            [Description("Key of Azure Speech Services. Defaults to current directory.")]
+            [Description("Key of Azure Speech Services.")]
             [CommandOption("-k|--key")]
             public string? Key { get; init; }
 
@@ -60,16 +60,7 @@ namespace SID1.Commands
             using AudioDataStream stream = AudioDataStream.FromResult(result);
             await stream.SaveToWaveFileAsync(temporaryFile);
 
-            Log.Information("Creating video to {outputVideo}", settings.OutputVideo);
-
-            if (File.Exists(settings.OutputVideo))
-                File.Delete(settings.OutputVideo);
-
             await Video.Create(temporaryFile, settings.BackgroundVideo, settings.OutputVideo);
-
-            File.Delete(temporaryFile);
-
-            Log.Information("Done :) > {videoPath}", settings.OutputVideo);
 
             return 0;
         }
